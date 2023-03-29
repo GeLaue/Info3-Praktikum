@@ -151,7 +151,7 @@ public class CommandList {
 		System.out.println("10: Programm beenden und Liste löschen");
 		
 		boolean abbruch = true;
-		while(abbruch) {
+		while(abbruch){
 
 		System.out.println("\nBitte wählen: ");
 
