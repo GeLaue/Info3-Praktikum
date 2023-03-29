@@ -203,7 +203,6 @@ public class CommandList {
 		} else {
 			System.out.print("Falsche Eingabe");
 		}
-		
 		}
 		
 	}
