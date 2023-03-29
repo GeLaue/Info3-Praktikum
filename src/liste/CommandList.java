@@ -77,31 +77,38 @@ public class CommandList {
 		return temp.getCommand();
 	}
 
-	
 	// Command um eine pos erhöhen:
 	public Command moveUp(int pos) {
-		Command tempA = getCommand(pos);
-		Command tempB = getCommand(pos + 1);
-		Command tempC = tempA;
-		tempA = tempB;
-		tempB = tempC;
-		return tempC;
+		if (pos >= 1 && pos <= getSize() - 1) {
+			Element tempA = getElement(pos);
+			Element tempB = getElement(pos + 1);
+			Command tempC = tempA.getCommand();
+			tempA.setCommand(tempB.getCommand());
+			tempB.setCommand(tempC);
+			return tempC;
+		}
+		return null;
 	}
 
 	// Command um eine pos runter:
 	public Command moveDown(int pos) {
-		Command tempA = getCommand(pos);
-		Command tempB = getCommand(pos - 1);
-		Command tempC = tempA;
-		tempA = tempB;
-		tempB = tempC;
-		return tempC;
+		if (pos >= 2 && pos <= getSize()) {
+			Element tempA = getElement(pos);
+			Element tempB = getElement(pos - 1);
+			Command tempC = tempA.getCommand();
+			tempA.setCommand(tempB.getCommand());
+			tempB.setCommand(tempC);
+			return tempC;
+		}
+		return null;
 	}
-	
 	
 	// Entfernen:
 	public Command remove(int pos) {
 		Element temp = getElement(pos);
+		
+		if(temp.getPrev() == null)
+		root = temp.getNext();
 		
 		if(temp.getPrev() != null)
 		temp.getPrev().setNext(temp.getNext());
@@ -201,6 +208,7 @@ public class CommandList {
 			System.out.print("Programm beendet");
 			abbruch = false;
 		} else {
+			
 			System.out.print("Falsche Eingabe");
 		}
 		}

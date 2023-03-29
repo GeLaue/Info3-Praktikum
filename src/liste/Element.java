@@ -37,5 +37,10 @@ public class Element {
 	public Command getCommand() {
 		return cmd;
 	}
+	
+	// Setter Command:
+	public void setCommand(Command cmd) {
+		this.cmd = cmd;
+	}
 
 }
