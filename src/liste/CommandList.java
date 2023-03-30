@@ -178,11 +178,11 @@ public class CommandList {
 		
 		//Abfrage was getan werden soll
 		boolean abbruch = true;
+		Scanner scanner = new Scanner(System.in);
+		
 		while(abbruch){
 
 		System.out.println("\nBitte wählen: ");
-
-		Scanner scanner = new Scanner(System.in);
 		int wahl = scanner.nextInt();
 		scanner.nextLine();
 		
@@ -271,7 +271,6 @@ public class CommandList {
 		}
 		
 		}
-		
+		scanner.close();
 	}
-
 }
