@@ -1,20 +1,31 @@
 package liste;
 import java.util.Scanner;
 
-
+/**
+ * Class for a doubly linked list
+ * @author Michael Sander, Gerrit von Laue
+ *
+ */
 public class CommandList {
 
 	private Element root;
 	
 	
 	
-	// Konstruktor:
+	/** 
+	 * Sets default value for root null
+	 */
 	public CommandList() {
 		root = null;
 	}
 
-	// Eintrag in Liste einfügen:
+	/**
+	 * Adds a new elemt to the list
+	 * @param c type command is included in the new element
+	 * @return the command contained in the new element else null
+	 */
 	public Command add(Command c) {
+		
 		if (c != null) {									// Abfragen ob Command wirklich besteht
 			Element elm = new Element(c);					// Neues Element anlegen.
 			if (root == null) {								// Einfügen des ersten Elements, da Anker noch auf null
@@ -33,7 +44,10 @@ public class CommandList {
 		return null;
 	}
 
-	// Länge der Liste:
+	/**
+	 * method determine the length of the list
+	 * @return returns length as int value
+	 */
 	public int getSize() {
 		
 		int size = 0;
@@ -46,7 +60,9 @@ public class CommandList {
 		return size;
 	}
 
-	// Liste Ausgeben:
+	/**
+	 * method to print out the list
+	 */
 	public void printCommands() {
 		
 		Element temp = root;
@@ -63,7 +79,11 @@ public class CommandList {
 	}
 	
 		
-	// Element ermitteln:
+	/**
+	 * method to find an element
+	 * @param pos position of the element in the list
+	 * @return the Element
+	 */
 	private Element getElement(int pos) {
 		if(pos <= getSize() && pos > 0){					// gesuchte Element muss innerhalb Bereich sein
 			Element temp = root;
@@ -76,7 +96,11 @@ public class CommandList {
 	}
 	
 	
-	// Command ermitteln:
+	/**
+	 * method to find the Command
+	 * @param pos position of the element in the list
+	 * @return the command
+	 */
 	public Command getCommand(int pos) {
 		Element temp = getElement(pos);
 		
@@ -85,35 +109,77 @@ public class CommandList {
 		return temp.getCommand();
 	}
 
-	// Command um eine pos runter:
+	/**
+	 * method to move the element down in the list
+	 * @param pos position of the element in the list
+	 * @return the Command of the moved element
+	 */
 	public Command moveDown(int pos) {
 		
-		if (pos >= 1 && pos <= getSize() - 1) { 	//Wenn das gesuchte Element zwischen dem ersten und dem vorletzen Element ist
-			Element tempA = getElement(pos);		//Die zwei Elemente suchen und tauschen
-			Element tempB = getElement(pos + 1);
-			Command tempC = tempA.getCommand();
-			tempA.setCommand(tempB.getCommand());
-			tempB.setCommand(tempC);
-			return tempC;
+		if (pos >= 1 && pos <= getSize() - 1) { //Wenn das gesuchte Element zwischen dem ersten und dem vorletzen Element ist
+				
+			Element tempA = getElement(pos - 1);			// Elemente aus der Liste nehmen
+			Element tempB = getElement(pos);
+			Element tempC = getElement(pos + 1);
+			Element tempD = getElement(pos + 2);
+			
+			tempB.setNext(tempD);							// C und B tauschen
+			tempC.setPrev(tempA);		
+			tempB.setPrev(tempC);
+			tempC.setNext(tempB);	
+
+			if(tempD != null)								// Zeiger der benachbarten Elemente, der Getauchten, umhängen
+				tempD.setPrev(tempB);
+
+			if(tempA != null)
+				tempA.setNext(tempC);
+			else
+				root = tempC;								// Anker umhängen, wenn erstes Element bewegt wird
+
+			return tempB.getCommand();						// getauschtes Element zurückgeben
+			
 		}
 		return null;
 	}
 
-	// Command um eine pos hoch:
+	/**
+	 * method to move the element up in the list
+	 * @param pos position of the element in the list
+	 * @return the Command of the moved element
+	 */
 	public Command moveUp(int pos) {
 		
 		if (pos >= 2 && pos <= getSize()) { 		//Wenn das gesuchte Element zwischen pos 2 und dem Ende der Liste ist
-			Element tempA = getElement(pos);		//Die zwei Elemente suchen und tauschen
+					
+			Element tempA = getElement(pos - 2);  	//Elemente aus der Liste holen
 			Element tempB = getElement(pos - 1);
-			Command tempC = tempA.getCommand();
-			tempA.setCommand(tempB.getCommand());
-			tempB.setCommand(tempC);
-			return tempC;
+			Element tempC = getElement(pos);
+			Element tempD = getElement(pos + 1);
+			
+			tempB.setNext(tempD);		//B und C tauschen
+			tempC.setNext(tempB);	
+			tempC.setPrev(tempA);		
+			tempB.setPrev(tempC);
+			
+			if(tempD != null)			//Benachbarte Elemente der zu Tauschenden anpassen
+				tempD.setPrev(tempB);
+			
+			if(tempA != null)
+				tempA.setNext(tempC);				
+			else
+				root = tempC;			//Anker umhängen
+
+			return tempC.getCommand();	
+			
 		}
 		return null;
 	}
 	
-	// Entfernen:
+	/**
+	 * method to remove an element
+	 * @param pos position of the element in the list
+	 * @return the Command of the removed element
+	 */
 	public Command remove(int pos) {
 		Element temp = getElement(pos);
 		//Wenn das Element nicht vorhanden ist
@@ -135,12 +201,16 @@ public class CommandList {
 		return temp.getCommand();
 	}
 
-	// Position ermitteln:
+	/**
+	 * method to get the position of an element
+	 * @param c the content of the element
+	 * @return the position of the element
+	 */
 	public int getPos(Command c) {
 		Element temp = root;
 		int i = 1;
 		//während nicht das Ende der Liste erreicht ist und die Namen nicht gleich sind
-		while (temp != null && !(temp.getCommand().getName().equals(c.getName()))) { 
+		while (temp != null && !(temp.getCommand().equals(c))) { 
 			temp = temp.getNext();
 			++i;
 		}
@@ -153,12 +223,17 @@ public class CommandList {
 		}
 	}
 
-	// Liste Leeren:
+	/**
+	 * method to delete all elements in the list
+	 */
 	public void clear() {
 		root = null;
 	}
 
-	// Main Funktion:
+	/**
+	 * main function for the user interface
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		CommandList list = new CommandList();
@@ -249,8 +324,8 @@ public class CommandList {
 		//Pos des Elements mit Eintrag c suchen
 		else if (wahl == 8) {
 			System.out.print("Inhalt des Eintrags eingeben: ");
-            String pos = scanner.nextLine();
-            Command c = new Command(pos);
+            int pos = scanner.nextInt();
+            Command c = list.getCommand(pos);
             System.out.print("Das Element hat die " + list.getPos(c) + ". Position in der Liste.");
 		} 
 		//Liste leeren
